@@ -1,8 +1,12 @@
 package top.moflowerlkh.shareparkingdemo.mqtt;
 
+import static top.moflowerlkh.shareparkingdemo.mqtt.MqttConfig.CHANNEL_NAME_IN;
+
+import java.util.Map;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,17 +14,14 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageHandler;
 import org.springframework.messaging.MessagingException;
+
+import lombok.extern.slf4j.Slf4j;
 import top.moflowerlkh.shareparkingdemo.Common.ParkingTimeTaskMsg;
 import top.moflowerlkh.shareparkingdemo.Common.TimeTaskMsg;
 import top.moflowerlkh.shareparkingdemo.dao.ParkingInfoDao;
 import top.moflowerlkh.shareparkingdemo.model.ParkingInfo;
 import top.moflowerlkh.shareparkingdemo.service.ParkingInfoService;
 import top.moflowerlkh.shareparkingdemo.service.ParkingTimePlanService;
-
-import javax.sound.midi.Soundbank;
-import java.util.Map;
-
-import static top.moflowerlkh.shareparkingdemo.mqtt.MqttConfig.CHANNEL_NAME_IN;
 
 @Configuration
 @Slf4j
@@ -81,8 +82,7 @@ public class MqttMsgReceiveHandler {
                         TimeTaskMsg msg = new ParkingTimeTaskMsg(
                                 msgMap.get("beginTime"),
                                 msgMap.get("endTime"),
-                                msgMap.get("msg")
-                        );
+                                msgMap.get("msg"));
                         if (argsMap.get("isEmpty").equals("true")) {
                             mqttMsgSendHandler.close(p.getClientReceiveTopic());
                             parkingTimePlanService.cancelTimePlanTaskFinally(msg);
